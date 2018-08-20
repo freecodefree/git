@@ -9,8 +9,10 @@ int seeMore();
 
 int main(int ac,char **av){
 	if(ac==1){
-		printf("usage:more [filename]");
-		return 1;
+		doMore(stdin);
+		return 0;
+//		printf("usage:more [filename]");
+//		return 1;
 	}
 	FILE *fp;
 	fp=fopen(*++av,"r");
@@ -58,9 +60,14 @@ int doMore(FILE *fp){
 }
 
 int seeMore(){
+	FILE *cmd;
+	cmd=fopen("/dev/tty","r");
+	if(cmd==NULL){
+		return PAGELINE;
+	}
 	printf("\033[7m ([q]:quit;[SPACE]:next page;[ENTER]:next line):\033[m");
 	int c;
-	while((c=getchar())!=EOF){
+	while((c=getc(cmd))!=EOF){
 	if(c=='q'){
 		return 0;
 	}
