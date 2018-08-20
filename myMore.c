@@ -33,24 +33,44 @@ int doMore(FILE *fp){
 	char line[LINELEN];
 	int numOfLine=0;
 	while(fgets(line,LINELEN,fp)){
+		if(fputs(line,stdout)==EOF){
+                        return 0;
+                }
+                numOfLine++;
+
 		int repeat;
-		if(numOfLine==PAGELINE){
+		if(numOfLine>=PAGELINE){
 			repeat=seeMore();
-		}
+		
 		if(repeat){
 			numOfLine-=repeat;
 		}else{
 			return 0;
 		}
-		if(fputs(line,stdout)==EOF){
-			return 1;
 		}
-		numOfLine++;
+//		if(fputs(line,stdout)==EOF){
+//			return 0;
+//		}
+//		numOfLine++;
 	}
 //	putchar('v');
 	return 0;
 }
 
 int seeMore(){
+	printf("\033[7m ([q]:quit;[SPACE]:next page;[ENTER]:next line):\033[m");
+	int c;
+	while((c=getchar())!=EOF){
+	if(c=='q'){
+		return 0;
+	}
+	if(c==' '){
+//		putchar('\n');
+		return PAGELINE;
+	}
+	if(c=='\n'){
+		return 1;
+	}
+	}
 	return PAGELINE;
 }
