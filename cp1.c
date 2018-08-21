@@ -27,7 +27,7 @@ int main(int ac,char **av){
 	}
 
 	while((numRead=read(sFd,buff,BUFFSIZE))>0){
-		if(numRead!=write(tFd,buff,BUFFSIZE)){
+		if(numRead!=write(tFd,buff,numRead)){
 			oop("can't write to",*av);
 			return 1;
 		}
