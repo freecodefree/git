@@ -17,3 +17,34 @@ int utmpOpen(char *filename){
 	numRecs=curRec=0;
 	return fdUtmp;
 }
+
+struct utmp *utmp_next(){
+	struct utmp *recp;
+
+	if(fdUtmp<0){
+		return NULLUT;
+	}
+	if((numRecs==curRec)&&utmpReload()==0){
+		return NULLUT;
+	}
+
+	recp=(struct utmp *)&utmpBuf[curRec*UTSIZE];
+	curRec++;
+
+	return recp;
+
+}
+
+int utmpReload(){
+	int amtRd;
+	amtRd=read(fdUtmp,utmpBuf,UTSIZE*NRECS);
+	numRecs=amtRd/UTSIZE;
+	curRec=0;
+	return numRecs;
+}
+
+void utmpClose(void){
+	if(fdUtmp!=-1){
+		close(fdUtmp);
+	}
+}
