@@ -25,6 +25,23 @@ int main(){
 }
 #endif
 
+#if 1
+int main(){
+	struct utmp * ut;
+
+	if(utmpOpen(UTMP_FILE)==-1){
+		perror(UTMP_FILE);
+		return 1;
+	}
+
+	while((ut=utmpNext())!=(struct utmp *)NULL){
+		showInfo(ut);
+	}
+	utmpClose();
+	return 0;
+}
+#endif
+
 int showInfo(struct utmp *up){
 	putchar('v');
 	return 0;
